@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "finalproject-kovalchuk-m25-555"
+version = "0.1.0"
+description = "Currency trading simulation"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{ include = "valutatrade_hub" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+prettytable = "^3.17.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.15.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+project = "valutatrade_hub.cli.interface:run"
