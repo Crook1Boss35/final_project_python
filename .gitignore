@@ -4,3 +4,6 @@ dist/
 .env
 .venv/
 .ruff_cache
+*.tmp
+.pytest_cache/
+*.cast

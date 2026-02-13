@@ -15,6 +15,7 @@ class SettingsLoader:
                 "USERS_PATH": "data/users.json",
                 "PORTFOLIOS_PATH": "data/portfolios.json",
                 "RATES_PATH": "data/rates.json",
+                "EXCHANGE_RATES_HISTORY_PATH": "data/exchange_rates.json",
                 "RATES_TTL_SECONDS": 300,
                 "DEFAULT_BASE_CURRENCY": "USD",
                 "LOG_PATH": "logs/actions.log",

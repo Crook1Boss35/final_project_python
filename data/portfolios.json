@@ -12,5 +12,20 @@
         "balance": 11.0
       }
     }
+  },
+  {
+    "user_id": 2,
+    "wallets": {}
+  },
+  {
+    "user_id": 3,
+    "wallets": {
+      "USD": {
+        "balance": 94.06387272943132
+      },
+      "EUR": {
+        "balance": 5.0
+      }
+    }
   }
 ]

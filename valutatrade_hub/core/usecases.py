@@ -165,6 +165,7 @@ def save_portfolio(portfolio: Portfolio) -> None:
 
 @log_action("GET_RATE")
 def get_rate(from_currency: str, to_currency: str, max_age_seconds: int | None = None) -> dict[str, str]:
+    """Возвращает курс валюты из локального кеша с учётом TTL."""
     from_c = normalize_currency_code(from_currency)
     to_c = normalize_currency_code(to_currency)
 
@@ -176,13 +177,15 @@ def get_rate(from_currency: str, to_currency: str, max_age_seconds: int | None =
         max_age_seconds = ttl
 
     key = _pair_key(from_c, to_c)
-
     db = _db()
     rates: dict[str, Any] = db.read_rates()
 
-    if key in rates and isinstance(rates[key], dict):
-        updated_at = rates[key].get("updated_at")
-        rate = rates[key].get("rate")
+    pairs = rates.get("pairs", {})
+    if isinstance(pairs, dict) and key in pairs and isinstance(pairs[key], dict):
+        updated_at = pairs[key].get("updated_at")
+        rate = pairs[key].get("rate")
+        source = pairs[key].get("source", "cache")
+
         if isinstance(updated_at, str) and isinstance(rate, (int, float)):
             age = (parse_iso(now_iso()) - parse_iso(updated_at)).total_seconds()
             if age <= max_age_seconds:
@@ -190,30 +193,15 @@ def get_rate(from_currency: str, to_currency: str, max_age_seconds: int | None =
                     "pair": key,
                     "rate": str(rate),
                     "updated_at": updated_at,
-                    "source": str(rates.get("source", "cache")),
+                    "source": str(source),
                 }
 
-    if key not in EXCHANGE_RATES:
-        raise ApiRequestError("no data")
-
-    rate_value = float(EXCHANGE_RATES[key])
-    updated = now_iso()
-
-    rates[key] = {"rate": rate_value, "updated_at": updated}
-    rates["source"] = "StubRates"
-    rates["last_refresh"] = updated
-    db.write_rates(rates)
-
-    return {
-        "pair": key,
-        "rate": str(rate_value),
-        "updated_at": updated,
-        "source": "StubRates",
-    }
+    raise ApiRequestError("Данные устарели или отсутствуют. Выполните update-rates.")
 
 
 @log_action("BUY", verbose=True)
 def buy_currency(user_id: int, currency: str, amount: float, base: str = "USD") -> dict[str, str]:
+    """Покупка валюты с использованием курса из кеша."""
     cur = normalize_currency_code(currency)
     base_c = normalize_currency_code(base)
 
@@ -244,8 +232,6 @@ def buy_currency(user_id: int, currency: str, amount: float, base: str = "USD") 
     cost = rate * amount_f
 
     usd_before = base_wallet.balance
-    if cost > usd_before:
-        base_wallet.withdraw(cost)
     cur_before = cur_wallet.balance
 
     base_wallet.withdraw(cost)
@@ -269,6 +255,7 @@ def buy_currency(user_id: int, currency: str, amount: float, base: str = "USD") 
 
 @log_action("SELL", verbose=True)
 def sell_currency(user_id: int, currency: str, amount: float, base: str = "USD") -> dict[str, str]:
+    """Продажа валюты с конвертацией в базовую валюту."""
     cur = normalize_currency_code(currency)
     base_c = normalize_currency_code(base)
 

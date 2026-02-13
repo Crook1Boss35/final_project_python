@@ -3,18 +3,26 @@ from __future__ import annotations
 import shlex
 
 from prettytable import PrettyTable
-from valutatrade_hub.core.exceptions import CurrencyNotFoundError, ApiRequestError, InsufficientFundsError
+
 from valutatrade_hub.core.currencies import list_supported_codes
-from valutatrade_hub.logging_config import setup_logging
+from valutatrade_hub.core.exceptions import (
+    ApiRequestError,
+    CurrencyNotFoundError,
+    InsufficientFundsError,
+)
 from valutatrade_hub.core.usecases import (
-    register_user,
-    login_user,
-    get_rate,
     buy_currency,
+    get_rate,
+    login_user,
+    register_user,
     sell_currency,
     show_portfolio,
 )
-
+from valutatrade_hub.logging_config import setup_logging
+from valutatrade_hub.parser_service.api_clients import CoinGeckoClient, ExchangeRateApiClient
+from valutatrade_hub.parser_service.config import ParserConfig
+from valutatrade_hub.parser_service.storage import RatesStorage
+from valutatrade_hub.parser_service.updater import RatesUpdater
 
 def _parse_kv(parts: list[str]) -> dict[str, str]:
     args: dict[str, str] = {}
@@ -38,6 +46,8 @@ def _print_help() -> None:
     print("  buy --currency <str> --amount <float>")
     print("  sell --currency <str> --amount <float>")
     print("  get-rate --from <str> --to <str>")
+    print("  update-rates [--source <coingecko|exchangerate>]")
+    print("  show-rates [--currency <str>] [--top <int>] [--base <str>]")
     print("  exit")
 
 
@@ -130,6 +140,89 @@ def run() -> None:
                 if "rate_pair" in res:
                     print(f"Начислено: {res['estimated_value']} {res['base']} (USD: {res['usd_before']} → {res['usd_after']})")
 
+            elif cmd == "update-rates":
+                args = _parse_kv(parts) if parts else {}
+                source = args.get("--source")
+
+                if source is not None and source not in {"coingecko", "exchangerate"}:
+                    raise ValueError("source должен быть: coingecko или exchangerate")
+
+                config = ParserConfig()
+                storage = RatesStorage()
+                clients = [
+                    CoinGeckoClient(config),
+                    ExchangeRateApiClient(config),
+                ]
+                updater = RatesUpdater(clients, storage)
+
+                result = updater.run_update(source=source)
+                if result["errors"]:
+                    for err in result["errors"]:
+                        print(f"ERROR: {err}")
+
+                if result["updated_count"] == 0 and result["errors"]:
+                    print("Обновление завершилось с ошибками. Подробности в логах.")
+                elif result["errors"]:
+                    print("Обновление завершилось с ошибками, но часть данных обновлена.")
+                else:
+                    print("Обновление успешно.")
+
+                print(f"Всего обновлено пар: {result['updated_count']}")
+                print(f"Last refresh: {result['last_refresh']}")
+
+            elif cmd == "show-rates":
+                args = _parse_kv(parts) if parts else {}
+                currency = args.get("--currency")
+                top_raw = args.get("--top")
+                base = args.get("--base")
+
+                top: int | None = None
+                if top_raw is not None:
+                    top = int(top_raw)
+                    if top <= 0:
+                        raise ValueError("--top должен быть > 0")
+
+                storage = RatesStorage()
+                cache = storage.read_cache()
+                pairs = cache.get("pairs", {})
+                last_refresh = cache.get("last_refresh")
+
+                if not pairs:
+                    print("Локальный кеш курсов пуст. Выполните 'update-rates'.")
+                    continue
+
+                items = []
+                for pair, data in pairs.items():
+                    if base and not pair.endswith(f"_{base.upper()}"):
+                        continue
+                    if currency:
+                        cur = currency.upper()
+                        if not (pair.startswith(f"{cur}_") or pair.endswith(f"_{cur}")):
+                            continue
+                    items.append((pair, data))
+
+                if not items:
+                    if currency:
+                        print(f"Курс для '{currency.upper()}' не найден в кеше.")
+                    else:
+                        print("Нет данных по заданным фильтрам.")
+                    continue
+
+                if top is not None:
+                    items.sort(key=lambda x: float(x[1]["rate"]), reverse=True)
+                    items = items[:top]
+                else:
+                    items.sort(key=lambda x: x[0])
+
+                table = PrettyTable()
+                table.field_names = ["Pair", "Rate", "Updated at", "Source"]
+                for pair, data in items:
+                    table.add_row([pair, data["rate"], data["updated_at"], data["source"]])
+
+                print(f"Rates from cache (last refresh: {last_refresh}):")
+                print(table)
+
+
             elif cmd == "get-rate":
                 args = _parse_kv(parts)
                 info = get_rate(args["--from"], args["--to"])
@@ -145,8 +238,6 @@ def run() -> None:
 
         except KeyError:
             print("Не хватает аргументов")
-        except ValueError as e:
-            print(str(e))
         except InsufficientFundsError as e:
             print(str(e))
         except CurrencyNotFoundError as e:

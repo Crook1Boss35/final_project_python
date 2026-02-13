@@ -77,7 +77,7 @@ class User:
         self._hashed_password = new_hash
 
 class Wallet:
-    """Кошелёк валюты."""
+    """Кошелёк валюты для баланса конкретной валюты."""
 
     def __init__(self, currency_code: str, balance: float = 0.0) -> None:
         self.currency_code = currency_code
@@ -115,7 +115,7 @@ class Wallet:
         return f"{self.currency_code}: {self.balance:.4f}"
 
 class Portfolio:
-    """Портфель пользователя."""
+    """Портфель пользователя с набором валютных кошельков.."""
 
     def __init__(
         self,

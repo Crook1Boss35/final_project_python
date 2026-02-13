@@ -1,15 +1,33 @@
-INFO 2026-02-12 03:56:15,912 TEST_LOG_LINE
-INFO 2026-02-12 03:57:51,393 2026-02-12T03:57:51+00:00 TEST user='1' currency='BTC' amount=1.0 rate=None base='USD' result=OK
-INFO 2026-02-12 03:57:51,393 2026-02-12T03:57:51+00:00 TEST verbose result={'ok': True}
-INFO 2026-02-12 04:18:17,931 2026-02-12T04:18:17+00:00 LOGIN user='None' currency='None' amount=None rate=None base='None' result=OK
-INFO 2026-02-12 04:18:21,923 2026-02-12T04:18:21+00:00 GET_RATE user='None' currency='None' amount=None rate=None base='None' result=OK
-INFO 2026-02-12 04:18:21,924 2026-02-12T04:18:21+00:00 BUY user='None' currency='None' amount=None rate=None base='None' result=OK
-INFO 2026-02-12 04:18:21,924 2026-02-12T04:18:21+00:00 BUY verbose result={'currency': 'EUR', 'amount': '1.0000', 'before': '10.0000', 'after': '11.0000', 'rate_pair': 'EUR_USD', 'rate': '1.08', 'estimated_value': '1.08', 'base': 'USD', 'usd_before': '2494.60', 'usd_after': '2493.52'}
-INFO 2026-02-12 04:18:25,433 2026-02-12T04:18:25+00:00 GET_RATE user='None' currency='None' amount=None rate=None base='None' result=OK
-INFO 2026-02-12 04:18:25,435 2026-02-12T04:18:25+00:00 SELL user='None' currency='None' amount=None rate=None base='None' result=OK
-INFO 2026-02-12 04:18:25,435 2026-02-12T04:18:25+00:00 SELL verbose result={'currency': 'EUR', 'amount': '1.0000', 'before': '11.0000', 'after': '10.0000', 'rate_pair': 'EUR_USD', 'rate': '1.08', 'estimated_value': '1.08', 'base': 'USD', 'usd_before': '2493.52', 'usd_after': '2494.60'}
-INFO 2026-02-12 04:21:37,835 2026-02-12T04:21:37+00:00 LOGIN user='alice' currency='None' amount=None rate=None base='None' result=OK
-INFO 2026-02-12 04:21:43,568 2026-02-12T04:21:43+00:00 GET_RATE user='None' currency='None' amount=None rate=None base='None' result=OK
-INFO 2026-02-12 04:21:43,569 2026-02-12T04:21:43+00:00 BUY user='1' currency='EUR' amount=1.0 rate=None base='None' result=OK
-INFO 2026-02-12 04:21:43,569 2026-02-12T04:21:43+00:00 BUY verbose result={'currency': 'EUR', 'amount': '1.0000', 'before': '10.0000', 'after': '11.0000', 'rate_pair': 'EUR_USD', 'rate': '1.08', 'estimated_value': '1.08', 'base': 'USD', 'usd_before': '2494.60', 'usd_after': '2493.52'}
-INFO 2026-02-12 04:23:25,835 2026-02-12T04:23:25+00:00 GET_RATE user='None' currency='BTC->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 03:28:12,894 2026-02-13T03:28:12+00:00 GET_RATE user='None' currency='BTC->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 03:28:35,340 2026-02-13T03:28:35+00:00 REGISTER user='test1' currency='None' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 03:28:42,733 2026-02-13T03:28:42+00:00 LOGIN user='test1' currency='None' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 03:28:58,938 2026-02-13T03:28:58+00:00 GET_RATE user='None' currency='BTC->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 03:28:58,938 2026-02-13T03:28:58+00:00 BUY user='2' currency='BTC' amount=1.0 rate=None base='None' result=ERROR error_type=InsufficientFundsError error_message='Недостаточно средств: доступно 0.0 USD, требуется 66551.0 USD'
+INFO 2026-02-13 03:48:03,721 2026-02-13T03:48:03+00:00 REGISTER user='demo' currency='None' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 03:48:10,298 2026-02-13T03:48:10+00:00 LOGIN user='demo' currency='None' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 03:48:21,154 2026-02-13T03:48:21+00:00 GET_RATE user='None' currency='EUR->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 03:48:21,154 2026-02-13T03:48:21+00:00 BUY user='3' currency='EUR' amount=1.0 rate=None base='None' result=ERROR error_type=InsufficientFundsError error_message='Недостаточно средств: доступно 0.0 USD, требуется 1.1872254541137361 USD'
+INFO 2026-02-13 03:48:29,421 2026-02-13T03:48:29+00:00 GET_RATE user='None' currency='BTC->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 03:48:37,998 2026-02-13T03:48:37+00:00 GET_RATE user='None' currency='AAA->USD' amount=None rate=None base='None' result=ERROR error_type=CurrencyNotFoundError error_message='Неизвестная валюта 'AAA''
+INFO 2026-02-13 04:01:12,581 2026-02-13T04:01:12+00:00 REGISTER user='demo' currency='None' amount=None rate=None base='None' result=ERROR error_type=ValueError error_message='Имя пользователя 'demo' уже занято'
+INFO 2026-02-13 04:01:20,059 2026-02-13T04:01:20+00:00 LOGIN user='demo' currency='None' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 04:01:32,008 2026-02-13T04:01:32+00:00 GET_RATE user='None' currency='EUR->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 04:01:32,009 2026-02-13T04:01:32+00:00 BUY user='3' currency='EUR' amount=1.0 rate=None base='None' result=ERROR error_type=InsufficientFundsError error_message='Недостаточно средств: доступно 0.0 USD, требуется 1.1872254541137361 USD'
+INFO 2026-02-13 04:01:42,075 2026-02-13T04:01:42+00:00 GET_RATE user='None' currency='EUR->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 04:01:42,075 2026-02-13T04:01:42+00:00 BUY user='3' currency='EUR' amount=1.0 rate=None base='None' result=ERROR error_type=InsufficientFundsError error_message='Недостаточно средств: доступно 0.0 USD, требуется 1.1872254541137361 USD'
+INFO 2026-02-13 04:01:53,206 2026-02-13T04:01:53+00:00 BUY user='3' currency='USD' amount=100.0 rate=None base='None' result=OK
+INFO 2026-02-13 04:01:53,207 2026-02-13T04:01:53+00:00 BUY verbose result={'currency': 'USD', 'amount': '100.0000', 'before': '0.0000', 'after': '100.0000'}
+INFO 2026-02-13 04:02:00,200 2026-02-13T04:02:00+00:00 GET_RATE user='None' currency='EUR->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 04:02:00,202 2026-02-13T04:02:00+00:00 BUY user='3' currency='EUR' amount=1.0 rate=None base='None' result=OK
+INFO 2026-02-13 04:02:00,202 2026-02-13T04:02:00+00:00 BUY verbose result={'currency': 'EUR', 'amount': '1.0000', 'before': '0.0000', 'after': '1.0000', 'rate_pair': 'EUR_USD', 'rate': '1.1872254541137361', 'estimated_value': '1.19', 'base': 'USD', 'usd_before': '100.00', 'usd_after': '98.81'}
+INFO 2026-02-13 04:02:06,981 2026-02-13T04:02:06+00:00 GET_RATE user='None' currency='EUR->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 04:02:06,983 2026-02-13T04:02:06+00:00 SELL user='3' currency='EUR' amount=1.0 rate=None base='None' result=OK
+INFO 2026-02-13 04:02:06,983 2026-02-13T04:02:06+00:00 SELL verbose result={'currency': 'EUR', 'amount': '1.0000', 'before': '1.0000', 'after': '0.0000', 'rate_pair': 'EUR_USD', 'rate': '1.1872254541137361', 'estimated_value': '1.19', 'base': 'USD', 'usd_before': '98.81', 'usd_after': '100.00'}
+INFO 2026-02-13 04:02:24,614 2026-02-13T04:02:24+00:00 GET_RATE user='None' currency='EUR->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 04:02:24,616 2026-02-13T04:02:24+00:00 BUY user='3' currency='EUR' amount=5.0 rate=None base='None' result=OK
+INFO 2026-02-13 04:02:24,616 2026-02-13T04:02:24+00:00 BUY verbose result={'currency': 'EUR', 'amount': '5.0000', 'before': '0.0000', 'after': '5.0000', 'rate_pair': 'EUR_USD', 'rate': '1.1872254541137361', 'estimated_value': '5.94', 'base': 'USD', 'usd_before': '100.00', 'usd_after': '94.06'}
+INFO 2026-02-13 04:02:28,458 2026-02-13T04:02:28+00:00 GET_RATE user='None' currency='EUR->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 04:02:39,497 2026-02-13T04:02:39+00:00 GET_RATE user='None' currency='BTC->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 04:02:46,837 2026-02-13T04:02:46+00:00 GET_RATE user='None' currency='BTC->USD' amount=None rate=None base='None' result=OK
+INFO 2026-02-13 04:02:46,837 2026-02-13T04:02:46+00:00 BUY user='3' currency='BTC' amount=1000.0 rate=None base='None' result=ERROR error_type=InsufficientFundsError error_message='Недостаточно средств: доступно 94.06387272943132 USD, требуется 66461000.0 USD'
+INFO 2026-02-13 04:02:51,715 2026-02-13T04:02:51+00:00 GET_RATE user='None' currency='AAA->USD' amount=None rate=None base='None' result=ERROR error_type=CurrencyNotFoundError error_message='Неизвестная валюта 'AAA''

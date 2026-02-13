@@ -5,5 +5,19 @@
     "hashed_password": "e6d56ea567a86d8d027eca5907bb12c2636b02743a68d3f38905c86de01b1587",
     "salt": "7ipCGfqUXxU",
     "registration_date": "2026-02-12T02:44:24+00:00"
+  },
+  {
+    "user_id": 2,
+    "username": "test1",
+    "hashed_password": "3eb65ae54bdcb19ee153b6c09d6a79b426ba2e3f7972069ddd83d2304ccc42e1",
+    "salt": "ht5ZtcYUzTM",
+    "registration_date": "2026-02-13T03:28:35+00:00"
+  },
+  {
+    "user_id": 3,
+    "username": "demo",
+    "hashed_password": "eaf2a36af3307298006b1c85c21bf8633c3a2067c3fb4535aeb068362bd44b59",
+    "salt": "YYeJ6m_heD0",
+    "registration_date": "2026-02-13T03:48:03+00:00"
   }
 ]
